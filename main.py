@@ -4,6 +4,7 @@ import homescreen as hs
 def main():
     # Definition of the highest priority widget, instantiating the screen and running the program
     toplevel = tk.Tk()
+    print("BEGIN")
     screen = hs.HomeScreen(toplevel)
     toplevel.mainloop()
 
