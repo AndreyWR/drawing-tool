@@ -2,11 +2,19 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import time
+from node import *
+from edge import *
+from polygon import *
 
 class HomeScreen:
     def __init__(self, toplevel):
         self.x = []
         self.y = []
+        self.n1 = Node()
+        self.n2 = Node()
+        self.pol = Polygon()
+        self.count = 0
+        self.close = False
 
         self.toplevel = toplevel
         self.toplevel.title('Draw Tool')
@@ -82,50 +90,46 @@ class HomeScreen:
 
 
     def FreeDraw(self):
-        x, y = 0, 0
 
         self.Switch()
 
-
-        time.sleep(2)
+        #time.sleep(2)
 
         print('RELIEF: {}'.format(self.poligonsnsidesbt["relief"]))
 
         self.canvas.bind("<Button-1>", self.click)
 
-        '''if count == 0:
-            x, y = self.x, self.y
-            count += 1
-        elif count == 1:
-        if len(self.x) == 2 and len(self.y) == 2:
-            print('entrou no draw')
-            print('x[0]: {}'.format(self.x[0]))
-            print('y[0]: {}'.format(self.y[0]))
-            print('x[1]: {}'.format(self.x[1]))
-            print('y[1]: {}'.format(self.y[1]))
-            self.canvas.create_line(self.x[0], self.y[0], self.x[1], self.y[1])
-            x = self.x[1]
-            y = self.y[1]
-            self.x = []
-            self.y = []
-            self.x.append(x)
-            self.y.append(y)'''
-
 
     def click(self, event):
-        print('Event')
-        x, y = 0, 0
+        #print('Event')
 
-        if self.x == []:
-            self.x.append(event.x)
-            self.y.append(event.y)
+        if self.count == 0:
+            #self.x.append(event.x)
+            #self.y.append(event.y)
+            self.n1 = Node(event.x, event.y)
+            self.count += 1
+            print('n1.X: {}'.format(self.n1.getX()))
+            print('n1.Y: {}'.format(self.n1.getY()))
         else:
             self.x.append(event.x)
             self.y.append(event.y)
-            self.canvas.create_line(self.x[0], self.y[0], self.x[1], self.y[1])
-            x = self.x[1]
-            y = self.y[1]
-            self.x = []
-            self.y = []
-            self.x.append(x)
-            self.y.append(y)
+            self.n2 = Node(event.x, event.y)
+            if self.count > 1:
+                aux = self.pol.getEdge()
+                print('N2: {}'.format(self.n2.getX()))
+                print('Auxiliar: {}, Tam: {}'.format(aux, len(aux)))
+                print('Aux: {}'.format(aux[0].getNode1().getX()))
+                print('Aux: {}'.format(aux[0].getNode1().getY()))
+                if (abs(self.n2.getX() - aux[0].getNode1().getX()) <= 5) and (abs(self.n2.getY() - aux[0].getNode1().getY()) <= 5):
+                    self.n2.setX(aux[0].getNode1().getX())
+                    self.n2.setY(aux[0].getNode1().getY())
+                    self.close = True
+
+
+            #print('n2.X: {}'.format(self.n2.getX()))
+            #print('n2.Y: {}'.format(self.n2.getY()))
+            ed = Edge(self.n1, self.n2)
+            self.canvas.create_line(ed.getNode1().getX(), ed.getNode1().getY(), ed.getNode2().getX(), ed.getNode2().getY())
+            self.pol.setEdge(ed)
+            self.n1 = self.n2
+            self.count += 1

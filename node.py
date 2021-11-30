@@ -1,10 +1,9 @@
 
 
 class Node:
-    def __init__(self, x, y, z):
+    def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-        self.z = z
 
 
     def setX(self, nx):
@@ -17,6 +16,18 @@ class Node:
 
     def setZ(self, nz):
         self.z = nz
+
+
+    def getX(self):
+        return self.x
+
+
+    def getY(self):
+        return self.y
+
+
+    def getZ(self):
+        return self.z
 
 
     def divideByNorm(self):
